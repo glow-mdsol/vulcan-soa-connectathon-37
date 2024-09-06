@@ -1,0 +1,14 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+*.egg-info/
+dist/
+build/
+
+# FHIR Implementation Guides
+*.json
+*.xml
+*.html
+
+# Ignore any other files or directories specific to your project
