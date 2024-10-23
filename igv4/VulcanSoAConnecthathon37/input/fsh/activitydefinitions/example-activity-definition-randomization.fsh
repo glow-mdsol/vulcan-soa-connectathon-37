@@ -6,7 +6,7 @@
 Instance: RandomizationStatus
 InstanceOf: ObservationDefinition
 Description: "Randomisation Status"
-Usage: #example
+Usage: #inline
 Title: "Randomisation Status"
 
 // * status = #registered
@@ -24,15 +24,12 @@ Title: "Randomisation Status"
 Instance: Randomisation
 InstanceOf: ActivityDefinition
 Description: "Randomisation"
-Usage: #example
+Usage: #inline
 Title: "Research Subject Randomisation"
-
 * status = #draft
 * experimental = true
-
 * kind = #Task
-
-* subjectReference = Reference(ResearchStudySubject)
+* subjectReference = Reference(ResearchSubject/SoA-PoC-ResearchSubject-Bill-Hicks)
 
 * purpose = "Randomise [ResearchSubject] to Treatment Arm as detailed in the [ResearchStudy] Protocol"
 

@@ -1,6 +1,6 @@
 Instance: Vulcan-SoA-Height-Weight-Panel
 InstanceOf: Questionnaire
-Usage: #example
+Usage: #inline
 * meta.profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
 * meta.tag.code = #"lformsVersion: 36.1.3"
 * title = "Weight and Height tracking panel"

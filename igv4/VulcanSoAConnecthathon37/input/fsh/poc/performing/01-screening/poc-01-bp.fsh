@@ -6,7 +6,6 @@ Usage: #example
 * subject = Reference(Patient/Bill-Hicks) 
 * authored = "2024-09-04T15:52:29.265Z"
 * author
-  * reference = Reference(Practitioner/smart-Practitioner-71482713)
   * type = #Practitioner
   * display = "Susan Clark"
 * item[+]

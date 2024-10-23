@@ -1,6 +1,6 @@
 Instance: Demographics-Questionnaire
 InstanceOf: Questionnaire
-Usage: #example
+Usage: #inline
 * meta.profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
 * meta.tag.code = #"lformsVersion: 36.1.3"
 * title = "Patient demographics panel"
@@ -14,7 +14,7 @@ Usage: #example
 * item[=].readOnly = false
 * item[+].type = #integer
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-unit"
-* item[=].extension.valueCoding = $unitsofmeasure#a "year"
+* item[=].extension.valueCoding = $unitsofmeasure#a "a"
 * item[=].linkId = "6534569105311"
 * item[=].text = "Age"
 * item[=].required = true

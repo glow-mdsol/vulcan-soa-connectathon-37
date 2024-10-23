@@ -1,6 +1,6 @@
 Instance: InitiateVisitProcess
 InstanceOf: ActivityDefinition
-Usage: #example
+Usage: #inline
 * name = "Schedule Encounter"
 * title = "Schedule Encounter"
 * description = "Initiate the process for an Encounter to be scheduled between a Patient participating as a ResearchSubject and a Healthcare Provider participating as a Investigator."

@@ -1,7 +1,7 @@
 Instance: SoA-PoC-Treatment-VisitEOS
 InstanceOf: StudyProtocolSoa
 Description: "Vulcan Schedule of Activities PoC - End of Study"
-Usage: #example
+Usage: #inline
 * status = #active
 * title = "Vulcan Schedule of Activities PoC"
 * type = http://terminology.hl7.org/CodeSystem/plan-definition-type#clinical-protocol

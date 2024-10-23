@@ -11,6 +11,7 @@ Usage: #example
 * status = #completed
 * subject = Reference(Patient/Bill-Hicks) "Hicks, Bill"
 * authored = "2024-05-29T15:33:27.378Z"
+* encounter = Reference(Encounter/PoC-Baseline-Encounter) "PoC-Baseline-Encounter"
 * author = Reference(Practitioner/smart-Practitioner-71482713) "Susan Clark"
 * author.type = "Practitioner"
 * item[0].linkId = "/69671-6"

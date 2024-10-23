@@ -1,6 +1,6 @@
 Instance: PHQ-15-Questionnaire
 InstanceOf: Questionnaire
-Usage: #example
+Usage: #inline
 * meta.profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
 * meta.tag.code = #"lformsVersion: 36.0.4"
 * title = "Patient Health Questionnaire 15 item (PHQ-15) [Reported]"
@@ -8,7 +8,7 @@ Usage: #example
 * copyright = "Copyright © Pfizer Inc. All rights reserved. Developed by Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke and colleagues, with an educational grant from Pfizer Inc. No permission required to reproduce, translate, display or distribute."
 * code = $loinc#69728-4 "Patient Health Questionnaire 15 item (PHQ-15) [Reported]"
 * item[0].type = #choice
-* item[=].code = $loinc#69671-6 "Stomach pain"
+* item[=].code = $loinc#69671-6 "Bothered by stomach pain in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -31,7 +31,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69672-4 "Back pain"
+* item[=].code = $loinc#69672-4 "Bothered by back pain in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -54,7 +54,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69673-2 "Pain in your arms, legs, or joints (knees, hips, etc.)"
+* item[=].code = $loinc#69673-2 "Bothered by pain in your arms, legs, or joints - knees, hips, etc - in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -77,7 +77,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69674-0 "Menstrual cramps or other problems with your periods"
+* item[=].code = $loinc#69674-0 "Bothered by menstrual cramps or other problems with your period in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -100,7 +100,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69717-7 "Pain or problems during sexual intercourse"
+* item[=].code = $loinc#69717-7 "Bothered by pain or problems during sexual intercourse [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -123,7 +123,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69675-7 "Headaches"
+* item[=].code = $loinc#69675-7 "Bothered by headaches in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -146,7 +146,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69676-5 "Chest pain"
+* item[=].code = $loinc#69676-5 "Bothered by chest pain in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -169,7 +169,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69677-3 "Dizziness"
+* item[=].code = $loinc#69677-3 "Bothered by dizziness in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -192,7 +192,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69678-1 "Fainting spells"
+* item[=].code = $loinc#69678-1 "Bothered by fainting spells in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -215,7 +215,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69679-9 "Feeling your heart pound or race"
+* item[=].code = $loinc#69679-9 "Bothered by feeling your heart pound or race in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -238,7 +238,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69680-7 "Shortness of breath"
+* item[=].code = $loinc#69680-7 "Bothered by shortness of breath in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -261,7 +261,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69681-5 "Constipation, loose bowels, or diarrhea"
+* item[=].code = $loinc#69681-5 "Bothered by constipation, loose stools, or diarrhea in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -284,7 +284,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69682-3 "Nausea, gas, or indigestion"
+* item[=].code = $loinc#69682-3 "Bothered by nausea, gas, or indigestion in last 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -307,7 +307,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69731-8 "Feeling tired or having low energy"
+* item[=].code = $loinc#69731-8 "Feeling tired or having low energy level in past 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -330,7 +330,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #choice
-* item[=].code = $loinc#69732-6 "Trouble sleeping"
+* item[=].code = $loinc#69732-6 "Trouble sleeping in past 4 weeks [Reported.PHQ]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl"
 * item[=].extension.valueCodeableConcept = $questionnaire-item-control#drop-down "Drop down"
 * item[=].extension.valueCodeableConcept.text = "Drop down"
@@ -353,7 +353,7 @@ Usage: #example
 * item[=].answerOption[=].extension[+].url = "http://hl7.org/fhir/StructureDefinition/ordinalValue"
 * item[=].answerOption[=].extension[=].valueDecimal = 2
 * item[+].type = #decimal
-* item[=].code = $loinc#70273-8 "Patient health questionnaire 15 item total score"
+* item[=].code = $loinc#70273-8 "Patient Health Questionnaire 15 item (PHQ-15) total score [Reported]"
 * item[=].extension.url = "http://hl7.org/fhir/StructureDefinition/questionnaire-unit"
 * item[=].extension.valueCoding = $unitsofmeasure#{score} "{score}"
 * item[=].required = false

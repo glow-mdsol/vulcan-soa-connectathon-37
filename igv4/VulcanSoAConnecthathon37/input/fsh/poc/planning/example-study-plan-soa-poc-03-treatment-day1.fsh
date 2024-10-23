@@ -1,7 +1,7 @@
 Instance: SoA-PoC-Treatment-Visit3
 InstanceOf: StudyProtocolSoa
 Description: "Vulcan Schedule of Activities PoC - Treatment Day 1"
-Usage: #example
+Usage: #inline
 * status = #active
 * title = "Vulcan Schedule of Activities PoC"
 * type = http://terminology.hl7.org/CodeSystem/plan-definition-type#clinical-protocol
@@ -12,7 +12,7 @@ Usage: #example
   * title = "Record Visit Date"
   * definitionUri = "ActivityDefinition/SoA-PoC-Visit-Date"
 * action[+]
-  * id = "VISIT-3-SoA-PoC-PHQ-15"
+  * id = "VISIT-3-SoA-PoC-SYSBP"
   * title = "Blood pressure panel mean systolic and mean diastolic"
   * definitionUri = "Questionnaire/Vulcan-SoA-Blood-Pressure-Panel"
 * action[+]

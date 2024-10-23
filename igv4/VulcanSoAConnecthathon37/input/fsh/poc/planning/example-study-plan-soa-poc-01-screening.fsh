@@ -1,7 +1,7 @@
 Instance: SoA-PoC-Screening-Visit1
 InstanceOf: StudyProtocolSoa
 Description: "Vulcan Schedule of Activities PoC - Screening"
-Usage: #example
+Usage: #inline
 * status = #active
 * title = "Vulcan Schedule of Activities PoC"
 * type = http://terminology.hl7.org/CodeSystem/plan-definition-type#clinical-protocol
@@ -25,6 +25,6 @@ Usage: #example
   * title = "Blood pressure panel mean systolic and mean diastolic"
   * definitionUri = "Questionnaire/Vulcan-SoA-Blood-Pressure-Panel"
 * action[+]
-  * id = "VISIT-1-SoA-BP"
+  * id = "VISIT-1-SoA-PHQ-1"
   * title = "PHQ-15 Questionnaire"
   * definitionUri = "Questionnaire/PHQ-15-Questionnaire"

@@ -1,6 +1,6 @@
 Instance: Vulcan-SoA-Blood-Pressure-Panel
 InstanceOf: Questionnaire
-Usage: #example
+Usage: #inline
 * meta
   * profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
   * tag

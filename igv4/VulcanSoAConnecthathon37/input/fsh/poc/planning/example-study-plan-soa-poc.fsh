@@ -1,7 +1,7 @@
 Instance: SoA-PoC-ProtocolDesign
 InstanceOf: StudyProtocolSoa
 Description: "SoA-PoC-Study-Plan"
-Usage: #example
+Usage: #inline
 * status = #active
 * title = "Vulcan Schedule of Activities - Study Plan"
 * type = http://terminology.hl7.org/CodeSystem/plan-definition-type#clinical-protocol

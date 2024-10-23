@@ -1,7 +1,7 @@
 Instance: H2Q-MC-LZZT-Vital-Signs-Temperature-ObservationDefinition
 InstanceOf: ObservationDefinition
 Description: "Body Temperature [Vital Signs]"
-Usage: #example
+Usage: #inline
 * category[+]
   * coding[+]
     * code = #vital-signs
@@ -18,7 +18,7 @@ Usage: #example
 Instance: H2Q-MC-LZZT-Vital-Signs-Temperature
 InstanceOf: StudyActivitySoa
 Description: "Planned Activity - Temperature [Vital Signs]"
-Usage: #example
+Usage: #inline
 Title: "Vital Signs/Temperature"
 * status = #active
 * title = "Vital Signs - Temperature"
