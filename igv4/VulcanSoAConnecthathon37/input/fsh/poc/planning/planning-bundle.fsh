@@ -26,7 +26,7 @@ Usage: #example
   * resource = SoA-PoC-Visit-Date
   * request
     * method = #POST  
-    * url = "Questionnaire"
+    * url = "PlanDefinition"
 * entry[+]
   * resource = SoA-PoC-ProtocolDesign
   * request
