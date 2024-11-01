@@ -29,6 +29,7 @@ Usage: #example
     * url = "ActivityDefinition"
 * entry[+]
   * resource = SoA-PoC-ProtocolDesign
+  * fullUrl = "https://soa.vulcan.org/PlanDefinition/SoA-PoC-ProtocolDesign"
   * request
     * method = #POST  
     * url = "PlanDefinition"

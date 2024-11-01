@@ -7,7 +7,8 @@ Usage: #example
 * meta.lastUpdated = "2024-06-12T11:16:46.000-04:00"
 * meta.source = "#WOtdXcTXAd1IxS7q"
 * meta.profile = "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaireresponse|3.0"
-* meta.tag.code = #"lformsVersion: 36.1.3"
+//* meta.tag.code = #"lformsVersion: 36.1.3"
+* meta.tag.display = "lformsVersion: 36.1.3"
 * questionnaire = "Questionnaire/Vulcan-SoA-Height-Weight-Panel"
 * status = #completed
 * subject = Reference(Patient/5770842) "Abbey, Robynn"

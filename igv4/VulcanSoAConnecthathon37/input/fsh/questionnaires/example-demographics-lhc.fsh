@@ -2,7 +2,8 @@ Instance: Demographics-Questionnaire
 InstanceOf: Questionnaire
 Usage: #inline
 * meta.profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
-* meta.tag.code = #"lformsVersion: 36.1.3"
+//* meta.tag.code = #"lformsVersion: 36.1.3"
+* meta.tag.display = "lformsVersion: 36.1.3"
 * title = "Patient demographics panel"
 * status = #draft
 * code = $loinc#79191-3 "Patient demographics panel"

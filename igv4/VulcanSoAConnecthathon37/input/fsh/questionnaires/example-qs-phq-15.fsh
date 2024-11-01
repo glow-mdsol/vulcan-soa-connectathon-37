@@ -2,7 +2,8 @@ Instance: PHQ-15-Questionnaire
 InstanceOf: Questionnaire
 Usage: #inline
 * meta.profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
-* meta.tag.code = #"lformsVersion: 36.0.4"
+//* meta.tag.code = #"lformsVersion: 36.0.4"
+* meta.tag.display = "lformsVersion: 36.0.4"
 * title = "Patient Health Questionnaire 15 item (PHQ-15) [Reported]"
 * status = #draft
 * copyright = "Copyright © Pfizer Inc. All rights reserved. Developed by Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke and colleagues, with an educational grant from Pfizer Inc. No permission required to reproduce, translate, display or distribute."
