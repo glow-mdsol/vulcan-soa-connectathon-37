@@ -3,8 +3,8 @@ InstanceOf: Questionnaire
 Usage: #inline
 * meta
   * profile = "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
-  * tag
-    * code = #"lformsVersion: 36.0.5"
+  * tag.display = "lformsVersion: 36.0.5"
+//    * code = #"lformsVersion: 36.0.5"
 * title = "Blood pressure panel mean systolic and mean diastolic"
 * status = #draft
 * code = $loinc#96607-7 "Blood pressure panel mean systolic and mean diastolic"

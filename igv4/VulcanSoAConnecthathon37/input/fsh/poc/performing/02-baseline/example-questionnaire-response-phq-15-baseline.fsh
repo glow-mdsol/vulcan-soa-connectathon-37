@@ -6,7 +6,8 @@ Usage: #example
 * meta.lastUpdated = "2024-05-29T11:33:28.000-04:00"
 * meta.source = "#0lIZjVUX1cOEzu37"
 * meta.profile = "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaireresponse|3.0"
-* meta.tag.code = #"lformsVersion: 36.0.5"
+//* meta.tag.code = #"lformsVersion: 36.0.5"
+* meta.tag.display = "lformsVersion: 36.0.5"
 * questionnaire = "Questionnaire/PHQ-15-Questionnaire"
 * status = #completed
 * subject = Reference(Patient/Bill-Hicks) "Hicks, Bill"

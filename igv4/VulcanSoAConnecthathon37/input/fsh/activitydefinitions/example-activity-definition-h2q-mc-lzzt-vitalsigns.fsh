@@ -22,7 +22,7 @@ Usage: #inline
 Title: "Vital Signs/Temperature"
 * status = #active
 * title = "Vital Signs - Temperature"
-* name = "Vital Signs - Temperature"
+* name = "VitalSigns_Temperature"
 * intent = #order
 * kind = #ServiceRequest
 * identifier[+]
