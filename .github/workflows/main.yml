@@ -16,29 +16,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-     
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      - name: Update the image to the latest publisher
-        uses: docker://hl7fhir/ig-publisher-base:latest
-        with:
-          args: ./_updatePublisher.sh --force
-
-      - name: Run sushi to generate the ig.ini file
-        uses: docker://hl7fhir/ig-publisher-base:latest
-        with:
-          args: sushi
-
-      - name: Run the IG publisher
-        uses: docker://hl7fhir/ig-publisher-base:latest
-        with:
-          args: ./_genonce.sh -no-sushi
-          
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output
+      - uses: qligier/fhir-ig-action@v0.3.0
+        working-directory: ./igv4/VulcanSoaConnectathon37
