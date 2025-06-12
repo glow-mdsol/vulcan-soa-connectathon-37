@@ -12,3 +12,4 @@ build/
 *.html
 
 # Ignore any other files or directories specific to your project
+fsh-generated/*
