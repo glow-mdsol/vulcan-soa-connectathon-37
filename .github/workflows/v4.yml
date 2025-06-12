@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./igv4/VulcanSoaConnectathon37
+        working-directory: ./igv4/VulcanSoaConnectathon37-r4
     steps:
       - uses: actions/checkout@v4
       - uses: qligier/fhir-ig-action@v0.3.0
