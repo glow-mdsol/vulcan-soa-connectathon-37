@@ -17,7 +17,7 @@ Usage: #inline
   * title = "Record Visit Date"
   * definitionUri = "PlanDefinition/SoA-PoC-Screening-Visit1"
   * relatedAction[+] 
-    * actionId = "SoA-PoC-Visit-3"
+    * targetId = "SoA-PoC-Visit-3"
     * relationship = #before
     * offsetDuration = 21 'd'
     * extension[acceptableOffsetRange].valueRange.low = 18 'd'    
@@ -27,7 +27,7 @@ Usage: #inline
   * title = "Baseline"
   * definitionUri = "PlanDefinition/SoA-PoC-Baseline-Visit2"
   * relatedAction[+] 
-    * actionId = "SoA-PoC-Visit-3"
+    * targetId = "SoA-PoC-Visit-3"
     * relationship = #before
     * offsetDuration = 1 'd'
 * action[+]
@@ -39,7 +39,7 @@ Usage: #inline
   * title = "Treatment - Day 7"
   * definitionUri = "PlanDefinition/SoA-PoC-Treatment-Visit4"
   * relatedAction[+] 
-    * actionId = "SoA-PoC-Visit-3"
+    * targetId = "SoA-PoC-Visit-3"
     * relationship = #after
     * offsetDuration = 7 'd'
     * extension[acceptableOffsetRange].valueRange.low = 6 'd'    
@@ -49,7 +49,7 @@ Usage: #inline
   * title = "Treatment - Day 14"
   * definitionUri = "PlanDefinition/SoA-PoC-Treatment-Visit5"
   * relatedAction[+] 
-    * actionId = "SoA-PoC-Visit-3"
+    * targetId = "SoA-PoC-Visit-3"
     * relationship = #after
     * offsetDuration = 14 'd'
     * extension[acceptableOffsetRange].valueRange.low = 12 'd'    
@@ -59,7 +59,7 @@ Usage: #inline
   * title = "Treatment - Day 21"
   * definitionUri = "PlanDefinition/SoA-PoC-Treatment-Visit6"
   * relatedAction[+] 
-    * actionId = "SoA-PoC-Visit-3"
+    * targetId = "SoA-PoC-Visit-3"
     * relationship = #after
     * offsetDuration = 21 'd'
     * extension[acceptableOffsetRange].valueRange.low = 19 'd'    
@@ -69,7 +69,7 @@ Usage: #inline
   * title = "Treatment - End of Study"
   * definitionUri = "PlanDefinition/SoA-PoC-EOS-VisitEOS"
   * relatedAction[+] 
-    * actionId = "SoA-PoC-Visit-3"
+    * targetId = "SoA-PoC-Visit-3"
     * relationship = #after
     * offsetDuration = 28 'd'
     * extension[acceptableOffsetRange].valueRange.low = 26 'd'    
