@@ -1,4 +1,72 @@
-# Vulcan SoA Connectathon 37
+# Vulcan SoA Connectathon - June 2025
+
+There are three scenarios under investigation:
+
+## Conditional Activities
+
+*Synopsis:* 
+In the conduct of a clinical Study, some patients may have a different set of activities based on their characteristics, sponsor decisions or emergent factors
+
+**Conditional Activities - Scenario 1**
+Using a Planned Activity, add a applicability test for doing a pregnancy test for biological females.
+* It should take account of Sex.
+* It should take account of Child-bearing potential, such as surgical sterilisation, prophylactic treatments
+
+**Conditional Activities - Scenario 2**
+Using a Planned activity, add an applicability test for doing a HbA1C test for patients with Diabetes
+* It should take into account Medical History
+* It should allow for distinction between Type I and Type II DM
+
+*Success Criteria:*  
+Using API and sample Patients evaluate whether an activity is applicable, and complete if so
+
+*Bonus point:*
+
+## Repeating Planned Sets of Activities (Cycles)
+
+*Synopsis:* 
+In many of the more complex (Oncology) studies, treatment cycles are utilised to allow patients to continue to receive IP until some stopping criteria.  Examples of stopping condition could be related to disease (eg Progressive Disease), design (eg max number of cycles before moving to long term follow-up) or emergent conditions (eg sponsor decision).   In addition, within the frame of repeating cycles some cohorts may have conditional activities based on patient characteristics (eg basket studies).  Note, we are not focusing on activities, so an indicative visit will suffice.  There is a need to update the ResearchSubject.subjectState (assuming R6).  You will be provided with a sample SoA for the cycles.
+
+
+**Oncology Cycles - Scenario 1**
+Define a Plan for 10 Cycles, with Encounters Day 1, Day 8 and Day 15 with no nesting, and no cycle dependencies (each treatment is the same); use an applicability filter based on ResearchSubject.subjectState to gate access to latter cycles and end of treatment.  Use inter-encounter for timing
+* Test a Patient, with 3 cycles completed, change ResearchSubject.subjectState and confirm that latter cycles are not scheduled (apart from EOT)
+
+**Oncology Cycles - Scenario 2**
+Define a Plan for 10 Cycles, with Encounters Day 1, Day 8 and Day 15 with a PlanDefinition for each of the cycles, and no cycle dependences (each treatment is the same); use an applicability filter based on ResearchSubject.subjectState to gate access to latter cycles and end of treatment.
+* Test a Patient, with 3 cycles completed, change ResearchSubject.subjectState and confirm that latter cycles are not scheduled (apart from EOT)
+* use timing within the cycle and between the cycles
+
+**Oncology Cycles - Scenario 3**
+
+Define a Plan for 10 Cycles, with Encounters Day 1, Day 8 and Day 15 with a PlanDefinition for each of the cycles, and no cycle dependences (each treatment is the same).  Use a repeated timing for the encounter timing.  Use an applicability filter based on ResearchSubject.subjectState to gate access to latter cycles and end of treatment.
+* Test a Patient, with 3 cycles completed (repeat 3 times), change ResearchSubject.subjectState and confirm that latter cycles are not scheduled (apart from EOT)
+* use timing within the cycle and between the cycles
+
+*Success Criteria:*  
+* In each scenario illustrate the stopping condition after cycle 3
+* Evaluate the timing outcomes compared to the provided SoA
+
+*Bonus point*
+
+## Unscheduled Activities
+
+*Synopsis:* 
+Up until to now the Study Design has been limited to pure 'happy path' implementation; where each subject has a single path through the study. More practically it is known that there can actually be variations in what datapoints are expected for a study participant as part of the activities
+
+**Unscheduled Activities - Scenario 1**
+Implement an unscheduled PlanDefinition for a set of Unscheduled Activities as an encounter that can be referred to in the SoA​
+* Add an encounter based on the unscheduled PlanDefinition (PD->CP->SR->EN)​
+* Annotate the PlanDefinition as an Unscheduled Encounter​
+* Identify the set of activities/outcomes based on the Unscheduled Activity
+
+**Unscheduled Activities - Scenario 2:**
+Describe the activity of Early Termination (as a Narrative)
+* ​Let the Provider suggest how they would implement episodic sets of activities that should be available to add based on triggered need
+
+
+
+## Vulcan SoA Connectathon 37
 
 ## Plan
 
