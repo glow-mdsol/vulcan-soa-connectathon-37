@@ -11,7 +11,15 @@ Usage: #inline
   * id = "SoA-PoC-Screening-Period-Plan-Definition-Late-S2"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Screening-Period-Plan-Definition-Late"
 // Study Plan
-
+* action[+]
+  * id = "SoA-PoC-EOT-Plan-Definition-S1"
+  * title = "End of Treatment"
+  * description = "End of treatment"
+  * condition[+]
+    * kind = #applicability
+    * expression.language = #text/fhirpath
+    * expression.expression = "%patient.Observation.where(code.coding.where(code='disease-progression').exists()).exists()"
+  * definitionCanonical = "PlanDefinition/SoA-PoC-EndOfTreatment-Plan-Definition"
 * action[+]
   * id = "SoA-PoC-Follow-Up-60-Plan-Definition-S3"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Safety-FollowUp60-Plan-Definition"

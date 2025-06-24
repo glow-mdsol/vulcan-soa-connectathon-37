@@ -12,7 +12,7 @@ Usage: #inline
 * bodySite[+]
   * text = "Liver structure (body structure)"
   * coding[+] = #10200004 "Liver structure (body structure)"
-* subject = Reference("Group/HCC-Cohort")
+* subject = Reference(Group/HCC-Cohort)
 
 Instance: SCCHN-Cohort
 InstanceOf: Group
@@ -32,7 +32,7 @@ Usage: #example
 * bodySite[+]
   * text = "Neck structure (body structure)"
   * coding[+] = #45048000 "Neck structure (body structure)"
-* subject = Reference("Group/SCCHN-Cohort")
+* subject = Reference(Group/SCCHN-Cohort)
 
 
 Instance: EOC-Cohort
@@ -49,7 +49,7 @@ Usage: #example
 * bodySite[+]
   * text = "Ovarian structure (body structure)"
   * coding[+] = #15497006  "Ovarian structure (body structure)"
-* subject = Reference("Group/EOC-Cohort")
+* subject = Reference(Group/EOC-Cohort)
 
 Instance: GBM-Cohort
 InstanceOf: Group
@@ -65,4 +65,4 @@ Usage: #example
 * bodySite[+]
   * text = "Brain structure (body structure)"
   * coding[+] = #12738006  "Brain structure (body structure)"
-* subject = Reference("Group/GBM-Cohort")
+* subject = Reference(Group/GBM-Cohort)

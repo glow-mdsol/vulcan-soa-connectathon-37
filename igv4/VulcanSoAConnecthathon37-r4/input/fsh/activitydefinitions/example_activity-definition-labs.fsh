@@ -190,7 +190,7 @@ Usage: #inline
 * observationResultRequirement[+]
   * reference = "ObservationDefinition/BUN-ObservationDefinition"
 * observationResultRequirement[+]
-  * reference = "ObservationDefinition/AFP-ObservationDefinition"
+  * reference = "ObservationDefinition/CA125-ObservationDefinition"
 * observationResultRequirement[+]
   * reference = "ObservationDefinition/Glycated-Hemoglobin-ObservationDefinition"
 

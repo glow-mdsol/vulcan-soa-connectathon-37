@@ -21,7 +21,7 @@ Usage: #inline
     * kind = #applicability
     * expression.language = #text/fhirpath
     * expression.expression = "%patient.Observation.where(code.coding.where(code='disease-progression').exists()).exists()"
-  * definitionCanonical = "PlanDefinition/EndOfTreatment"
+  * definitionCanonical = "PlanDefinition/SoA-PoC-EndOfTreatment-Plan-Definition"
 * action[+]
   * id = "SoA-PoC-Follow-Up-30-Plan-Definition-S1"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Safety-FollowUp60-Plan-Definition"

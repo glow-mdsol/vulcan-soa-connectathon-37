@@ -28,11 +28,6 @@ Usage: #example
     * method = #POST  
     * url = "PlanDefinition"
 * entry[+]
-  * resource = SoA-PoC-Screening-Period-Plan-Definition-Late
-  * request
-    * method = #POST  
-    * url = "PlanDefinition"
-* entry[+]
   * resource = SoA-PoC-Cycle1Day1-Plan-Definition
   * request
     * method = #POST  
@@ -467,3 +462,8 @@ Usage: #example
   * request
     * method = #POST
     * url = "ObservationDefinition"
+* entry[+]
+  * resource =  ChemoDay1 
+  * request
+    * method = #POST
+    * url = "ActivityDefinition"

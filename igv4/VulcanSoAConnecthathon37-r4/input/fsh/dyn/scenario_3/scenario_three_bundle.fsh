@@ -23,11 +23,6 @@ Usage: #example
     * method = #POST  
     * url = "PlanDefinition"
 * entry[+]
-  * resource = SoA-PoC-Screening-Period-Plan-Definition-Late
-  * request
-    * method = #POST  
-    * url = "PlanDefinition"
-* entry[+]
   * resource = SoA-PoC-Cycle1Day1-Plan-Definition
   * request
     * method = #POST  
