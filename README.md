@@ -64,6 +64,33 @@ Implement an unscheduled PlanDefinition for a set of Unscheduled Activities as a
 Describe the activity of Early Termination (as a Narrative)
 * ​Let the Provider suggest how they would implement episodic sets of activities that should be available to add based on triggered need
 
+Notes:
+* PlanDefinitions can be apply'ed multiple times; this would reflect the current state of the data at the time of the action.  Use of Questionnaire is preferred to modify workflow.  Interactive feedback, will update the state of the precondition to the apply activities.  Use the QuestionnaireResponse and $extract to update the data state
+* Need to define the Period over which the conditions would occur, this requires input from the User
+* Pre-conditions
+  * ResearchStudy
+    * PlanDefintion - for each of the planned encounters
+    * ActivityDefinition - for each of the activities to be done as and when 
+* Activities:
+  * Screen a Patient according to eligibility 
+  * Initiate the Patient in the ResearchStudy
+    * Action to create EarlyScreening
+    * Complete activities - need to know when the activities are complicated 
+    * Action to create LateScreening 
+    * Complete activities
+
+### Reference Materials
+* https://www.youtube.com/watch?v=4qF6FNn79o8&list=PLKuZNI94tzWaDuupQSXGfLEYWpel_aj7y&index=110
+  * https://www.devdays.com/wp-content/uploads/2024/07/6.12.24-Taylor-Le-InteractiveCDS-Taylor-Le.pdf
+* https://build.fhir.org/clinicalreasoning-cds-on-fhir.html
+  * recommendation as a card
+* $apply implementation - https://github.com/cqframework/clinical-reasoning/tree/master/cqf-fhir-cr/src/main/java/org/opencds/cqf/fhir/cr/plandefinition
+  * QuestionnaireResponse
+* Profiles for CaseFeatures [Examples](https://build.fhir.org/ig/HL7/cqf-recommendations/examples.html#profile-index)
+  * Relevant for workflow
+
+Recommendation
+* extension to define the next step
 
 
 ## Vulcan SoA Connectathon 37

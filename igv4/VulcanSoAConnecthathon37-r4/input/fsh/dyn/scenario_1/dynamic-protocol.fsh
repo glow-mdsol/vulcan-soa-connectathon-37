@@ -1,6 +1,6 @@
 Instance: SoA-PoC-ResearchStudy-DynamicProtocol-ScenarioOne
 InstanceOf: ResearchStudySoa
-Usage: #example
+Usage: #inline
 * status = #active
 * identifier[+]
   * value = "vulcan_soa_dyn_01"

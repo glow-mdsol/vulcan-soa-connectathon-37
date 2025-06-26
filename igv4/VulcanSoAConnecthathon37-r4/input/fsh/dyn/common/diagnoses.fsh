@@ -1,5 +1,6 @@
 Instance: HCC-Cohort
 InstanceOf: Group
+// this needs to be able to be the union of ResearchSubject in ResearchStudy and Disease
 * type = #person
 * actual = false
 
@@ -13,10 +14,12 @@ Usage: #inline
   * text = "Liver structure (body structure)"
   * coding[+] = #10200004 "Liver structure (body structure)"
 * subject = Reference(Group/HCC-Cohort)
+* clinicalStatus = #recurrence
 
 Instance: SCCHN-Cohort
 InstanceOf: Group
 Usage: #inline
+// this needs to be able to be the union of ResearchSubject in ResearchStudy and Disease
 * type = #person
 * actual = false
 
@@ -37,6 +40,7 @@ Usage: #example
 
 Instance: EOC-Cohort
 InstanceOf: Group
+// this needs to be able to be the union of ResearchSubject in ResearchStudy and Disease
 * type = #person
 * actual = false
 
@@ -53,6 +57,7 @@ Usage: #example
 
 Instance: GBM-Cohort
 InstanceOf: Group
+// this needs to be able to be the union of ResearchSubject in ResearchStudy and Disease
 * type = #person
 * actual = false
 
@@ -66,3 +71,34 @@ Usage: #example
   * text = "Brain structure (body structure)"
   * coding[+] = #12738006  "Brain structure (body structure)"
 * subject = Reference(Group/GBM-Cohort)
+
+
+Instance: Tom-Daley
+InstanceOf: Patient
+Usage: #example
+* name[+]
+  * given = "Tom"
+  * family = "Daley"
+
+
+Instance: Subject-1001
+InstanceOf: ResearchSubject
+Usage: #inline
+* identifier[+]
+  * value = "1001"
+  * type = #PLAC
+* status = #active
+* study = Reference(ResearchStudy/SoA-PoC-ResearchStudy-Conditional-Activities)
+* individual = Reference(Patient/Tom-Daley)
+
+
+Instance: Diabetes-1001
+InstanceOf: Condition
+Usage: #example
+* clinicalStatus = #active
+* code
+  * text = "Diabetes mellitus (disorder)"
+  * coding[+] = #73211009 "Diabetes mellitus (disorder)"
+* verificationStatus = #confirmed
+* subject = Reference(Patient/Tom-Daley)
+* category = #diagnosis

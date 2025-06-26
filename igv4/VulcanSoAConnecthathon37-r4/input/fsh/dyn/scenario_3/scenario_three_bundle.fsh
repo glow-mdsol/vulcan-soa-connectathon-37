@@ -103,7 +103,22 @@ Usage: #example
     * method = #POST
     * url = "ActivityDefinition"
 * entry[+]
-  * resource =  CTMRIAssessment-ActivityDefinition 
+  * resource =  CTMRIAssessment-Liver-ActivityDefinition 
+  * request
+    * method = #POST
+    * url = "ActivityDefinition"
+* entry[+]
+  * resource =  CTMRIAssessment-Brain-ActivityDefinition 
+  * request
+    * method = #POST
+    * url = "ActivityDefinition"
+* entry[+]
+  * resource =  CTMRIAssessment-Head-Neck-ActivityDefinition 
+  * request
+    * method = #POST
+    * url = "ActivityDefinition"
+* entry[+]
+  * resource =  CTMRIAssessment-Ovarian-ActivityDefinition 
   * request
     * method = #POST
     * url = "ActivityDefinition"

@@ -12,25 +12,79 @@ Usage: #example
 * timingTiming.repeat.durationUnit = #d
 * timingTiming.repeat.boundsDuration = 14 #d
 
-Instance: AcmePlanDefinition
+Instance: TreatmentCycles-Cycle2-Plus-PlanDefinition
 InstanceOf: PlanDefinition
 Title: "ACME Chemotherapy Regimen"
-Description: "Repeatable chemotherapy regimen every 14 days until progression"
+Description: "Repeatable chemotherapy regimen every 21 days until progression"
 Usage: #example
 * status = #active
 * type.text = "Chemotherapy Regimen"
 * title = "ACME Chemotherapy Regimen"
-* action[+].title = "Repeat Chemotherapy Cycle"
-* action[=].description = "Repeat every 14 days until progression or clinician decision"
-* action[=].definitionCanonical = "ActivityDefinition/ChemoDay1"
-* action[=].timingTiming.repeat.frequency = 1
-* action[=].timingTiming.repeat.period = 14
-* action[=].timingTiming.repeat.periodUnit = #d
-* action[=].condition[+]
-  * kind = #applicability
-  * expression
-    * language = #text/fhirpath
-    * expression = "%patient.Observation.where(code.coding.where(code='disease-progression').exists()).empty()"
+* action[+]
+  * title = "Physical Examination"
+  * definitionCanonical = "ActivityDefinition/SoA-PoC-Physical-Examination-Activity-Definition"
+* action[+]
+  * title = "Vital Signs"
+  * definitionCanonical = "ActivityDefinition/SoA-PoC-Vital-Signs-Activity-Definition"
+* action[+]
+  * title = "Performance Status"
+  * definitionCanonical = "ActivityDefinition/SoA-PoC-PerformanceStatus"
+* action[+]
+  * title = "Resting O2 Saturation"
+  * definitionCanonical = "ActivityDefinition/O2Sats-ActivityDefinition"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+      * expression = "Group.where(id = 'Group/SCCHN-Cohort').where(member.entity.reference = 'Patient/' + Id).exists()"
+* action[+]
+  * definitionCanonical = "ActivityDefinition/PregnancyTest-ActivityDefinition"
+  * title = "Pregnancy Test"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * description = "Pregnancy test for Biological Females"
+      * language = #text/fhirpath
+      * expression = "Patient.gender='female'"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * description = "Evaluation of Fertility"
+      * language = #text/fhirpath
+      // 118183008 | Finding of fertility (finding) |
+      // 8619003 | Infertile (finding) |
+      * expression = "Observation.where(subject.reference = 'Patient/' + Id).where(code.coding.system = 'http://snomed.info/sct' and code.coding.code = '118183008').valueCodeableConcept!='http://snomed.info/sct|8619003'"
+* action[+]
+  * definitionCanonical = "ActivityDefinition/Blood-Typing-Interference-Test-ActivityDefinition"
+  * title = "Blood Typing Interference Test"
+  * description = "Blood Typing Interference Test (Cycle 2 Day 1 only)"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+* action[+]
+  * definitionCanonical = "ActivityDefinition/BloodChemistry-ActivityDefinition"
+  * title = "Blood Chemistry"
+* action[+]
+  * definitionCanonical = "ActivityDefinition/Hematology-ActivityDefinition"
+  * title = "Hematology"
+* action[+]
+  * definitionCanonical = "ActivityDefinition/Coagulation-ActivityDefinition"
+  * title = "Coagulation (for GBM)"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+      * expression = "Group.where(id = 'Group/GBM-Cohort').where(member.entity.reference = 'Patient/' + Id).exists()"
+* action[+]
+  * title = "Isatuximab Administration"
+  * definitionCanonical = "ActivityDefinition/IsatuximabAdministration-ActivityDefinition"
+* action[+]
+  * title = "Atezolizumab Administration"
+  * definitionCanonical = "ActivityDefinition/AtezolizumabAdministration-ActivityDefinition"
+* action[+]
+  * title = "Send a AppointmentRequest for 21 days"
+  // Hook on encounter start; add extension to   
 
 Instance: CarePlanPatient123
 InstanceOf: CarePlan

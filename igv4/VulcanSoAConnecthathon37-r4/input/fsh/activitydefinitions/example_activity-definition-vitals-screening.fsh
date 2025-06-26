@@ -6,3 +6,5 @@ Usage: #inline
 * description = "Collect vital signs data from the patient."
 * status =  #active
 * kind = #Task
+* observationResultRequirement[+] = Canonical(SoA-PoC-Vital-Signs-Observation-Definition)
+

@@ -62,6 +62,17 @@ Usage: #inline
 * observationResultRequirement[+]
   * reference = "ObservationDefinition/Glycated-Hemoglobin-ObservationDefinition"
 
+Instance: BloodChemistry-ActivityDefinition-HBA1C
+InstanceOf: ActivityDefinition
+Usage: #inline
+* name = "Blood Chemistry - HbA1C"
+* title = "Blood Chemistry Panel - HbA1C"
+* description = "Order blood chemistry laboratory tests."
+* status = #active
+* kind = #ServiceRequest
+* observationResultRequirement[+]
+  * reference = "ObservationDefinition/Glycated-Hemoglobin-ObservationDefinition"
+
 
 Instance: BloodChemistry-ActivityDefinition-AFP
 InstanceOf: ActivityDefinition
@@ -76,57 +87,7 @@ Usage: #inline
   * code = #24323-8
   * display = "Basic metabolic 2000 panel - Serum or Plasma"
 * observationResultRequirement[+]
-  * reference = "ObservationDefinition/UricAcid-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/eGFR-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Chloride-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Bicarbonate-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Sodium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Magnesium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Phosphate-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/ALT-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TotalBilirubin-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/DirectBilirubin-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/LDH-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TotalProtein-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Albumin-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TSH-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/FreeT4-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/FreeT3-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TotalT3-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/GlucoseFasting-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Calcium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/AlkalinePhosphatase-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/AST-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Potassium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Creatinine-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/BUN-ObservationDefinition"
-* observationResultRequirement[+]
   * reference = "ObservationDefinition/AFP-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Glycated-Hemoglobin-ObservationDefinition"
 
 
 Instance: BloodChemistry-ActivityDefinition-CA125
@@ -142,57 +103,7 @@ Usage: #inline
   * code = #24323-8
   * display = "Basic metabolic 2000 panel - Serum or Plasma"
 * observationResultRequirement[+]
-  * reference = "ObservationDefinition/UricAcid-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/eGFR-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Chloride-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Bicarbonate-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Sodium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Magnesium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Phosphate-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/ALT-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TotalBilirubin-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/DirectBilirubin-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/LDH-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TotalProtein-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Albumin-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TSH-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/FreeT4-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/FreeT3-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/TotalT3-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/GlucoseFasting-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Calcium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/AlkalinePhosphatase-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/AST-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Potassium-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Creatinine-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/BUN-ObservationDefinition"
-* observationResultRequirement[+]
   * reference = "ObservationDefinition/CA125-ObservationDefinition"
-* observationResultRequirement[+]
-  * reference = "ObservationDefinition/Glycated-Hemoglobin-ObservationDefinition"
 
 
 Instance: Hematology-ActivityDefinition
