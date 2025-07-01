@@ -1,6 +1,5 @@
 Instance: HCC-Cohort
 InstanceOf: Group
-// this needs to be able to be the union of ResearchSubject in ResearchStudy and Disease
 * type = #person
 * actual = false
 
