@@ -78,7 +78,7 @@ Instance: BloodChemistry-ActivityDefinition-AFP
 InstanceOf: ActivityDefinition
 Usage: #inline
 * name = "Blood Chemistry (including Alpha-fetoprotein (AFP))"
-* title = "Blood Chemistry Panel"
+* title = "Blood Chemistry Panel (required for HCC)"
 * description = "Order blood chemistry laboratory tests."
 * status = #active
 * kind = #ServiceRequest

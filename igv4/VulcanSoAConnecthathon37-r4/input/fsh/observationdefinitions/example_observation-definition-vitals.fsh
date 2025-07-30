@@ -34,3 +34,17 @@ Usage: #inline
 * category = #vital-signs
 * code = #8867-4
 * quantitativeDetails.unit = #bpm
+
+Instance: SoA-PoC-Temperature-Observation-Definition
+InstanceOf: ObservationDefinition
+Usage: #inline
+* category = #vital-signs
+* code = #8310-5
+* quantitativeDetails.unit = #degC
+
+Instance: SoA-PoC-Respiratory-Rate-Observation-Definition
+InstanceOf: ObservationDefinition
+Usage: #inline
+* category = #vital-signs
+* code = #9279-1
+* quantitativeDetails.unit = #bpm

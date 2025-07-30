@@ -1,4 +1,4 @@
-Instance: CTMRIAssessment-Liver-ActivityDefinition
+Instance: CTAssessment-Liver-ActivityDefinition
 InstanceOf: ActivityDefinition
 Usage: #inline
 * name = "CT/MRI Disease Assessment of Liver for Disease Assessment"
@@ -7,6 +7,16 @@ Usage: #inline
 * status = #active
 * kind = #ServiceRequest
 * code.coding[+] = #241549007 "Computed tomography of liver (procedure)"
+// TODO: Look at diagnostic report/tumor measurement
+
+Instance: MRIAssessment-Liver-ActivityDefinition
+InstanceOf: ActivityDefinition
+Usage: #inline
+* name = "CT/MRI Disease Assessment of Liver for Disease Assessment"
+* title = "CT/MRI Disease Assessment of Liver for Disease Assessment"
+* description = "Order CT or MRI imaging for disease assessment (HCC)."
+* status = #active
+* kind = #ServiceRequest
 * code.coding[+] = #241622002 "Magnetic resonance imaging of liver (procedure)"  
 
 Instance: CTMRIAssessment-Ovarian-ActivityDefinition
