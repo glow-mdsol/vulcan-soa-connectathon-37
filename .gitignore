@@ -1,15 +1,39 @@
+# System properties
+.DS_Store
+
 # Python
 *.pyc
 __pycache__/
-venv/
+*.py[cod]
+*$py.class
 *.egg-info/
 dist/
 build/
+.venv
+venv/
+env/
 
-# FHIR Implementation Guides
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# IDE Settings
+.idea/
+.vscode/
+
+# Environment Variables
+.env
+
+# FHIR Implementation Guides (Generated Content)
+# Note: Be cautious with *.json if you have source JSON files.
 *.json
 *.xml
 *.html
 
-# Ignore any other files or directories specific to your project
+# Specific generated folders
 fsh-generated/*
+
+# Environment Variables
+.env
+
+# FHIR Implementation Guides (Generated Content)    
+.fhir-packages
