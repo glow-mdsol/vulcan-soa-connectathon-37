@@ -13,6 +13,11 @@ Usage: #inline
     * offsetRange
       * low = 14 'd'
       * high = 28 'd'
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+      * expression = "ResearchSubject.where(individual = 'Patient/' + Id and study.reference == 'ResearchStudy/456' and status == 'http://hl7.org/fhir/ValueSet/research-subject-status#screening').exists()"
 * action[+]
   * title = "Screening (D-14 to D-1)"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Screening-Period-Plan-Definition-Late"
@@ -21,6 +26,11 @@ Usage: #inline
     * expression
       * language = #text/fhirpath
       * expression = "ServiceRequest()"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+      * expression = "ResearchSubject.where(individual = 'Patient/' + Id).where(status = 'http://hl7.org/fhir/ValueSet/research-subject-status#screening').exists()"
   * relatedAction[+]
     * actionId = "SoA-PoC-Cycle1Day1-Plan-Definition-S1"
     * relationship = #before
@@ -31,16 +41,35 @@ Usage: #inline
   * id = "SoA-PoC-Cycle1Day1-Plan-Definition-S1"
   * title = "Cycle 1 Day 1"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Cycle1Day1-Plan-Definition"
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+      * expression = "ResearchSubject.where(individual = 'Patient/' + Id).where(status = 'http://hl7.org/fhir/ValueSet/research-subject-status#randomized').exists()"
 * action[+]
   * title = "Disease Assessments"
   * definitionCanonical = "PlanDefinition/Disease-Assessments"
   * relatedAction[+]
     * actionId = "SoA-PoC-Cycle1Day1-Plan-Definition-S1"
     * relationship = #concurrent-with-start
+  * condition[+]
+    * kind = #applicability
+    * expression
+      * language = #text/fhirpath
+      * expression = "ResearchSubject.where(individual = 'Patient/' + Id).where(status = 'http://hl7.org/fhir/ValueSet/research-subject-status#randomized').exists()"
 * action[+]
   * id = "SoA-PoC-Cycle1Day8-Plan-Definition-S1"
   * title = "Cycle 1 Day 8"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Cycle1Day1-Plan-Definition"
+  * extension[http://hl7.org/fhir/uv/vulcan-schedule/StructureDefinition/Exit]
+    * extension[http://hl7.org/fhir/uv/vulcan-schedule/StructureDefinition/destinations]
+      * actionId = "SoA-PoC-EndOfTreatment-Plan-Definition-S1"
+      * basedOn[+]
+        * expression = "DiagnosticReport.where(subject = 'Patient/' + Id).where(conclusion = 'RECIST Progressive Disease').exists()"
+  * extension[http://hl7.org/fhir/uv/vulcan-schedule/StructureDefinition/NextSteps][+]
+    * actionId = "SoA-PoC-Cycle1Day15-Plan-Definition-S1"
+    * basedOn[+]
+      * expression = "DiagnosticReport.where(subject = 'Patient/' + Id).where(conclusion = 'RECIST Progressive Disease').exists()"
   * relatedAction[+]
     * actionId = "SoA-PoC-Cycle1Day1-Plan-Definition-S1"
     * relationship = #after
@@ -124,4 +153,7 @@ Usage: #inline
     * periodUnit = #d
 * action[+]
   * id = "SoA-PoC-End-Of-Study-Plan-Definition-S1"
+  * definitionCanonical = "PlanDefinition/SoA-PoC-Safety-End-Of-Study-Participation-Plan-Definition"
+* action[+]
+  * id = "SoA-PoC-Unscheduled-Activity"
   * definitionCanonical = "PlanDefinition/SoA-PoC-Safety-End-Of-Study-Participation-Plan-Definition"
