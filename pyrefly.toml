@@ -1,0 +1,16 @@
+# Pyrefly Configuration File
+# See https://pyrefly.org/docs/configuration for more details
+
+project-includes = ["src"]
+project-excludes = ["**/test*"]
+
+# Python version to simulate
+python-version = "3.12"
+
+# Platform to simulate
+python-platform = "linux"
+
+[errors]
+# Disable specific error codes
+# bad-assignment = false
+# missing-import = false
