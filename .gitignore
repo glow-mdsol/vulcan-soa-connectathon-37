@@ -37,3 +37,6 @@ fsh-generated/*
 
 # FHIR Implementation Guides (Generated Content)    
 .fhir-packages
+
+
+tmp/
