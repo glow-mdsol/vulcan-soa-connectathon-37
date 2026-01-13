@@ -66,9 +66,11 @@ def get_careplans_for_patient(patient_id: str, config: Config):
         for entry in care_plans.entry:
             _contained = entry.resource  # type: CarePlan
             _cp = {"care_plan_id": entry.resource.id, "care_plan": _contained}
-            based_on = entry.resource.based_on
+            # Try to find the PlanDefinition used to create this CarePlan
+            based_on = entry.resource.based_on[0]
             req = client.read(RequestOrchestration, based_on.reference.split("/")[-1])
-            _pdef = req.instantiates_canonical.reference
+            # This returns a string
+            _pdef = req.instantiates_canonical[0]
             if _pdef.startswith("PlanDefinition/"):
                 plan_definition_id = _pdef.split("/")[-1]
                 plan_definition = client.read(PlanDefinition, plan_definition_id)
@@ -191,20 +193,28 @@ def evaluate(research_subject_id: str, config: Config, is_withdrawing: Optional[
     print(f"\nCompleted Actions ({len(completed_actions)}):")
     for action_id in completed_actions:
         details = graph.get_action_details(action_id)
+        cp_data = care_plan_by_action.get(action_id)
+        cp_id = cp_data["care_plan_id"] if cp_data else "N/A"
         print(f"  ✓ {action_id}: {details['title']}")
+        print(f"     CarePlan: {cp_id}")
     
     print(f"\nActive Actions ({len(active_actions)}):")
     for action_id in active_actions:
         details = graph.get_action_details(action_id)
+        cp_data = care_plan_by_action.get(action_id)
+        cp_id = cp_data["care_plan_id"] if cp_data else "N/A"
         print(f"  → {action_id}: {details['title']}")
+        print(f"     CarePlan: {cp_id}")
     
     print(f"\nAvailable Next Actions ({len(available_actions)}):")
     for action_info in available_actions:
         action_id = action_info["action_id"]
         condition = action_info.get("condition")
         details = graph.get_action_details(action_id)
+        plan_def_id = details['definition'].split('/')[-1] if details.get('definition') else "N/A"
         is_common = " (common event)" if graph.is_common_event(action_id) else ""
         print(f"  • {action_id}: {details['title']}{is_common}")
+        print(f"     PlanDefinition ID: {plan_def_id}")
         if condition:
             print(f"     Condition: [{condition['kind']}] {condition['expression'] or 'no expression'}")
         if action_info.get("from_action"):
@@ -215,10 +225,12 @@ def evaluate(research_subject_id: str, config: Config, is_withdrawing: Optional[
         action_id = action_info["action_id"]
         condition = action_info.get("condition")
         details = graph.get_action_details(action_id)
+        plan_def_id = details['definition'].split('/')[-1] if details.get('definition') else "N/A"
         plan_def = graph.get_plan_definition(action_id)
         plan_title = plan_def.title if plan_def else "N/A"
         print(f"  ⭐ {action_id}: {details['title']}")
-        print(f"     PlanDefinition: {plan_title}")
+        print(f"     PlanDefinition ID: {plan_def_id}")
+        print(f"     PlanDefinition Title: {plan_title}")
         if condition:
             print(f"     Condition: [{condition['kind']}] {condition['expression'] or 'no expression'}")
     

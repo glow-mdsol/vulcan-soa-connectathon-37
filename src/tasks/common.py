@@ -1,8 +1,6 @@
 from fhirsdk.client import Client, Auth, AuthCredentials
-from fhirsdk.hl7_fhir_r6_core.research_study import ResearchStudy
-from fhirsdk.hl7_fhir_r6_core.plan_definition import PlanDefinition
-from tasks.fhirsdk.hl7_fhir_r6_core.base import Extension
 from typing import List, Dict, Set, Optional
+from fhirsdk import CarePlan, ResearchStudy, PlanDefinition, Reference, Extension
 
 import logging
 logger = logging.getLogger(__name__)
@@ -43,8 +41,9 @@ def get_plan_definitions_for_study(study_id: str, config):
                 plan_def_id = act.definition_canonical.split("/")[-1]
                 plan = client.read(PlanDefinition, plan_def_id)
                 assert plan, f"PlanDefinition with ID {plan_def_id} not found"
-                plan_definitions[study] = plan
+                plan_definitions.setdefault(study_plan.id, []).append(plan)
         plan_definitions[plan_id] = study_plan
+    return plan_definitions
 
 def get_plan_for_study(study_id: str, config):
     """
