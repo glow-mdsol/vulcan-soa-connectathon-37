@@ -72,3 +72,44 @@ Success Criteria:
 
 Bonus point:
 [ ] Scheduled Activities added 
+
+
+# Tooling
+
+## Web UI
+
+A Streamlit-based web interface is available for browsing and analyzing research subject activities:
+
+**Launch the UI:**
+```bash
+./run_ui.sh
+# or
+poetry run streamlit run src/tasks/ui.py
+```
+
+The UI provides:
+- 📊 **Dashboard**: Summary metrics and patient information
+- 📅 **Events Timeline**: Completed and active events with cycle tracking
+- 🎯 **Available Actions**: Recommended next steps and all possible actions
+- 🗺️ **Journey Visualization**: Interactive graph of patient progression
+- 🔍 **Browse Subjects**: Select from all research subjects on the server
+
+See [UI_README.md](UI_README.md) for detailed documentation.
+
+## Command Line Tools
+
+The API uses python, to set this up do the following:
+* Install Python [Installing Python](https://www.python.org/downloads/)
+* Install Poetry [Installing Poetry](https://python-poetry.org/docs/)
+* Use a virtual env (recommended)
+  ```
+  $ poetry env activate
+  ```
+* Install the project 
+  ```
+  $ poetry install
+  ```
+* Add the configuration by copying the `example.env` to `.env` and inserting the correct values
+
+
+

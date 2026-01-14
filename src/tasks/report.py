@@ -4,12 +4,18 @@ Report on the patient journey
 * Look at the decisions made at each step
 """
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from fhirsdk.client import Client, Auth, AuthCredentials
 from fhirsdk import ResearchSubject, ResearchStudy, PlanDefinition, Reference, CarePlan
 from tasks.common import TransitionGraph
 from tasks.config import Config
 from tasks.evaluate import get_careplans_for_patient, is_care_plan_completed
+try:
+    import graphviz
+    GRAPHVIZ_AVAILABLE = True
+except ImportError:
+    GRAPHVIZ_AVAILABLE = False
+    print("Warning: graphviz not available. Visual representations will be disabled.")
 
 
 def generate_research_subject_report(research_subject_id: str, config: Config) -> Dict[str, Any]:
@@ -60,6 +66,7 @@ def generate_research_subject_report(research_subject_id: str, config: Config) -
     action_journey = []
     care_plan_by_action = {}
     decision_points = []
+    action_repeat_counters = {}  # Track repeat numbers
     
     for cp_data in care_plans:
         care_plan = cp_data["care_plan"]
@@ -74,6 +81,12 @@ def generate_research_subject_report(research_subject_id: str, config: Config) -
             if action_details and action_details.get("definition"):
                 referenced_plan_id = action_details["definition"].split("/")[-1]
                 if referenced_plan_id == plan_def_id:
+                    # Track repeat number
+                    if action_id not in action_repeat_counters:
+                        action_repeat_counters[action_id] = 0
+                    action_repeat_counters[action_id] += 1
+                    repeat_number = action_repeat_counters[action_id]
+                    
                     care_plan_by_action[action_id] = cp_data
                     
                     # Build journey entry
@@ -83,7 +96,9 @@ def generate_research_subject_report(research_subject_id: str, config: Config) -
                         "plan_definition_id": plan_def_id,
                         "care_plan_id": cp_data["care_plan_id"],
                         "status": care_plan.status,
-                        "is_completed": is_care_plan_completed(care_plan)
+                        "is_completed": is_care_plan_completed(care_plan),
+                        "repeat_number": repeat_number,
+                        "is_repeatable": graph.is_repeatable(action_id)
                     }
                     action_journey.append(journey_entry)
                     break
@@ -198,11 +213,16 @@ def print_research_subject_report(report: Dict[str, Any]):
     print(f"{'─' * 80}")
     for i, entry in enumerate(report['patient_journey'], 1):
         status_icon = "✓" if entry['is_completed'] else "→" if entry['status'] == "active" else "○"
-        print(f"{i}. {status_icon} {entry['action_title']}")
+        repeat_num = entry.get('repeat_number', 1)
+        is_repeatable = entry.get('is_repeatable', False)
+        cycle_label = f" (C{repeat_num})" if repeat_num > 1 or is_repeatable else ""
+        print(f"{i}. {status_icon} {entry['action_title']}{cycle_label}")
         print(f"   Action ID: {entry['action_id']}")
         print(f"   PlanDefinition: {entry['plan_definition_id']}")
         print(f"   CarePlan: {entry['care_plan_id']}")
         print(f"   Status: {entry['status']}")
+        if is_repeatable:
+            print(f"   Cycle: {repeat_num}")
         print()
     
     if report['decision_points']:
@@ -228,14 +248,256 @@ def print_research_subject_report(report: Dict[str, Any]):
     print("=" * 80)
 
 
-def report_patient_journey(research_subject_id: str, config: Config):
+def visualize_patient_journey(report: Dict[str, Any], output_path: Optional[str] = None, view: bool = True) -> Optional[str]:
     """
-    Generate and print a research subject report.
+    Create a visual representation of the patient journey using graphviz.
+    
+    Args:
+        report: Report dictionary from generate_research_subject_report
+        output_path: Optional path to save the visualization (without extension)
+        view: Whether to automatically open the visualization (default: True)
+    
+    Returns:
+        Path to the generated file, or None if graphviz is not available
+    """
+    if not GRAPHVIZ_AVAILABLE:
+        print("Error: graphviz library not available. Install with: pip install graphviz")
+        return None
+    
+    # Create a new directed graph
+    dot = graphviz.Digraph(comment='Patient Journey', format='png')
+    dot.attr(rankdir='TB')  # Top to bottom layout
+    dot.attr('node', shape='box', style='rounded,filled', fontname='Arial')
+    dot.attr('edge', fontname='Arial', fontsize='10')
+    
+    # Create sets for quick lookup and map journey entries by action_id
+    completed_actions = {j['action_id'] for j in report['patient_journey'] if j['is_completed']}
+    active_actions = {j['action_id'] for j in report['patient_journey'] if j['status'] in ['active', 'on-hold']}
+    
+    # Build map of action_id to journey entries (for cycle numbers)
+    action_journey_map = {}
+    for journey_entry in report['patient_journey']:
+        action_id = journey_entry['action_id']
+        if action_id not in action_journey_map:
+            action_journey_map[action_id] = []
+        action_journey_map[action_id].append(journey_entry)
+    
+    # Track which actions are decision points and their outcomes
+    decision_outcomes = {}
+    for decision in report['decision_points']:
+        if decision['decision_made']:
+            taken_options = [opt for opt in decision['options'] if opt['was_taken']]
+            if taken_options:
+                decision_outcomes[decision['action_id']] = taken_options
+    
+    # Add all nodes (or node instances for repeated actions)
+    node_instances = {}  # Track created node IDs for repeated actions
+    
+    for action in report['protocol_structure']['all_actions']:
+        action_id = action['action_id']
+        title = action['title']
+        
+        # Check if this action has been performed and how many times
+        journey_entries = action_journey_map.get(action_id, [])
+        
+        if not journey_entries:
+            # Action not yet performed - create single node
+            # Determine node color and style based on status
+            fillcolor = '#E8E8E8'  # Light gray for not started
+            color = '#808080'  # Gray border
+            label_suffix = ''
+            
+            # Check if this is a common event
+            if action.get('is_common_event'):
+                fillcolor = '#ADD8E6'  # Light blue for common events
+                label_suffix += '\n(Common Event)'
+            
+            # Create node label
+            node_label = f"{title}{label_suffix}"
+            
+            # Use diamond shape for decision points
+            if action_id in decision_outcomes:
+                dot.node(action_id, label=node_label, fillcolor=fillcolor, color=color, shape='diamond', style='filled')
+            else:
+                dot.node(action_id, label=node_label, fillcolor=fillcolor, color=color)
+            
+            node_instances[action_id] = [action_id]
+        else:
+            # Action has been performed - create node(s) with cycle numbers
+            node_instances[action_id] = []
+            
+            for journey_entry in journey_entries:
+                repeat_num = journey_entry.get('repeat_number', 1)
+                is_repeatable = journey_entry.get('is_repeatable', False)
+                
+                # Create unique node ID for this instance
+                node_id = f"{action_id}_C{repeat_num}" if is_repeatable or repeat_num > 1 else action_id
+                node_instances[action_id].append(node_id)
+                
+                # Determine node color and style based on status
+                if journey_entry['is_completed']:
+                    fillcolor = '#90EE90'  # Light green for completed
+                    color = '#228B22'  # Dark green border
+                    label_suffix = f'\n✓ Completed'
+                elif journey_entry['status'] in ['active', 'on-hold']:
+                    fillcolor = '#FFD700'  # Gold for active
+                    color = '#FF8C00'  # Dark orange border
+                    label_suffix = f'\n→ Active'
+                else:
+                    fillcolor = '#E8E8E8'  # Light gray
+                    color = '#808080'  # Gray border
+                    label_suffix = ''
+                
+                # Add cycle number to label if repeatable
+                cycle_label = f" (C{repeat_num})" if is_repeatable or repeat_num > 1 else ""
+                
+                # Check if this is a common event
+                if action.get('is_common_event'):
+                    fillcolor = '#ADD8E6'  # Light blue for common events
+                    label_suffix += '\n(Common Event)'
+                
+                # Create node label
+                node_label = f"{title}{cycle_label}{label_suffix}"
+                
+                # Use diamond shape for decision points
+                if action_id in decision_outcomes and journey_entry == journey_entries[-1]:
+                    dot.node(node_id, label=node_label, fillcolor=fillcolor, color=color, shape='diamond', style='filled')
+                else:
+                    dot.node(node_id, label=node_label, fillcolor=fillcolor, color=color)
+    
+    # Add decision annotation boxes
+    for action_id, taken_options in decision_outcomes.items():
+        # Find the last node instance for this decision
+        if action_id in node_instances:
+            decision_node_id = node_instances[action_id][-1]
+            
+            # Create annotation node for the decision
+            annotation_id = f"{decision_node_id}_decision_info"
+            decision_text = "Decision Made:\n"
+            for opt in taken_options:
+                decision_text += f"→ {opt['target_title']}\n"
+            
+            # Create a note-style box for the decision
+            dot.node(
+                annotation_id,
+                label=decision_text.strip(),
+                shape='note',
+                style='filled',
+                fillcolor='#FFFACD',  # Light yellow
+                color='#DAA520',       # Goldenrod border
+                fontsize='10'
+            )
+            
+            # Connect decision node to annotation with invisible edge to position it
+            dot.edge(
+                decision_node_id,
+                annotation_id,
+                style='dashed',
+                color='#DAA520',
+                arrowhead='none',
+                constraint='false'  # Don't affect layout
+            )
+    
+    # Add edges based on the protocol structure
+    # We'll track which transitions were actually taken
+    taken_transitions = set()
+    for decision in report['decision_points']:
+        for opt in decision['options']:
+            if opt['was_taken']:
+                taken_transitions.add((decision['action_id'], opt['target_action_id']))
+    
+    # Build edges from patient journey (actual path taken)
+    # Use the actual node IDs including cycle numbers
+    for i in range(len(report['patient_journey']) - 1):
+        from_entry = report['patient_journey'][i]
+        to_entry = report['patient_journey'][i + 1]
+        
+        from_action = from_entry['action_id']
+        to_action = to_entry['action_id']
+        
+        # Get the actual node IDs (with cycle numbers if applicable)
+        from_repeat = from_entry.get('repeat_number', 1)
+        to_repeat = to_entry.get('repeat_number', 1)
+        from_repeatable = from_entry.get('is_repeatable', False)
+        to_repeatable = to_entry.get('is_repeatable', False)
+        
+        from_node_id = f"{from_action}_C{from_repeat}" if from_repeatable or from_repeat > 1 else from_action
+        to_node_id = f"{to_action}_C{to_repeat}" if to_repeatable or to_repeat > 1 else to_action
+        
+        # Highlight taken path
+        dot.edge(from_node_id, to_node_id, color='#228B22', penwidth='2.5', label='')
+    
+    # Add other possible transitions (not taken) as dashed lines
+    for decision in report['decision_points']:
+        decision_action = decision['action_id']
+        
+        # Find the last instance of this decision action
+        if decision_action in node_instances:
+            last_node_id = node_instances[decision_action][-1]
+            
+            for opt in decision['options']:
+                if not opt['was_taken']:
+                    target_action = opt['target_action_id']
+                    # Get the node ID for the target (first instance or the not-yet-created node)
+                    if target_action in node_instances:
+                        target_node_id = node_instances[target_action][0]
+                    else:
+                        target_node_id = target_action
+                    
+                    # Show alternative paths as dashed lines
+                    dot.edge(
+                        last_node_id, 
+                        target_node_id, 
+                        style='dashed', 
+                        color='#808080',
+                        label='Not taken'
+                    )
+    
+    # Add a legend
+    with dot.subgraph(name='cluster_legend') as legend:
+        legend.attr(label='Legend', style='filled', color='lightgray')
+        legend.node('legend_completed', '✓ Completed', fillcolor='#90EE90', shape='box', style='rounded,filled')
+        legend.node('legend_active', '→ Active', fillcolor='#FFD700', shape='box', style='rounded,filled')
+        legend.node('legend_not_started', 'Not Started', fillcolor='#E8E8E8', shape='box', style='rounded,filled')
+        legend.node('legend_common', 'Common Event', fillcolor='#ADD8E6', shape='box', style='rounded,filled')
+        legend.node('legend_decision', 'Decision Point', fillcolor='#90EE90', shape='diamond', style='filled')
+    
+    # Save and/or view
+    if output_path:
+        file_path = dot.render(output_path, view=view, cleanup=True)
+        print(f"\nVisualization saved to: {file_path}")
+        return file_path
+    elif view:
+        # Create a temporary file
+        import tempfile
+        import os
+        temp_dir = tempfile.gettempdir()
+        temp_path = os.path.join(temp_dir, f"patient_journey_{report['research_subject_id']}")
+        file_path = dot.render(temp_path, view=True, cleanup=True)
+        print(f"\nVisualization opened: {file_path}")
+        return file_path
+    else:
+        return dot.source
+
+
+def report_patient_journey(research_subject_id: str, config: Config, visualize: bool = True, output_path: Optional[str] = None):
+    """
+    Generate and print a research subject report with optional visualization.
     
     Args:
         research_subject_id: The ID of the research subject
         config: Configuration object with FHIR server connection details
+        visualize: Whether to create a visual representation (default: True)
+        output_path: Optional path to save visualization (without extension)
+    
+    Returns:
+        Tuple of (report dict, visualization path or None)
     """
     report = generate_research_subject_report(research_subject_id, config)
     print_research_subject_report(report)
-    return report
+    
+    viz_path = None
+    if visualize:
+        viz_path = visualize_patient_journey(report, output_path=output_path, view=True)
+    
+    return report, viz_path
