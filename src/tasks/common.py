@@ -155,12 +155,32 @@ class TransitionGraph:
         for action in self.plan.action:
             action_id = action.id
             self._graph[action_id] = []
+            
+            # Extract timepoint and repeat information
+            timepoint_info = None
+            repeat_allowed = False
+            repeat_interval = None
+            
+            _extensions = {}
+            if action.extension:
+                for ext in action.extension:
+                    _extension = unpack_extension(ext)
+                    if _extension["type"] == "soaPlannedTimepoint":
+                        timepoint_info = _extension
+                        repeat_allowed = _extension.get("soaRepeatAllowed", False)
+                        repeat_interval = _extension.get("soaRepeatInterval")
+                    _extensions[_extension["type"]] = _extension
+
             self._actions[action_id] = {
                 "id": action.id,
                 "title": action.title,
                 "description": action.description,
                 "definition": action.definition_canonical,
-                "type": "action"
+                "type": "action",
+                "timepoint": timepoint_info,
+                "repeat_allowed": repeat_allowed,
+                "repeat_interval": repeat_interval,
+                "extensions": _extensions
             }
             
             # Process sub-actions to find soaTransition extensions
@@ -185,7 +205,7 @@ class TransitionGraph:
                                     self._graph[action_id].append(transition)
                                     self._incoming_refs.add(target_id)
         
-        # Count incoming edges
+        # Count incoming edges (to identify the starting actions and common events)
         for action_id in self._graph.keys():
             self._incoming_count[action_id] = 0
         for transitions in self._graph.values():
@@ -267,6 +287,117 @@ class TransitionGraph:
         """
         return self._incoming_count.get(action_id, 0)
     
+    def is_repeatable(self, action_id: str) -> bool:
+        """
+        Check if an action can be repeated.
+        
+        :param action_id: The action ID to check
+        :return: True if the action has soaRepeatAllowed=true
+        """
+        action = self._actions.get(action_id)
+        return action.get("repeat_allowed", False) if action else False
+    
+    def get_repeat_interval(self, action_id: str) -> Optional[Dict]:
+        """
+        Get the repeat interval for an action.
+        
+        :param action_id: The action ID to check
+        :return: Dictionary with repeat interval info or None
+        """
+        action = self._actions.get(action_id)
+        return action.get("repeat_interval") if action else None
+    
+    def get_timepoint_info(self, action_id: str) -> Optional[Dict]:
+        """
+        Get the timepoint information for an action.
+        
+        :param action_id: The action ID to check
+        :return: Dictionary with timepoint info or None
+        """
+        action = self._actions.get(action_id)
+        return action.get("timepoint") if action else None
+    
+    def calculate_suggested_visit_date(self, action_id: str, reference_date, completed_count: int = 0):
+        """
+        Calculate suggested visit date based on soaPlannedTimepoint.
+        
+        :param action_id: The action ID to calculate for
+        :param reference_date: Reference date (e.g., study start date or last visit date)
+        :param completed_count: Number of times this action has been completed (for repeatable actions)
+        :return: Tuple of (suggested_date, window_start, window_end) or (None, None, None)
+        """
+        import datetime
+        
+        timepoint = self.get_timepoint_info(action_id)
+        if not timepoint:
+            return None, None, None
+        
+        # Base offset from reference date
+        planned_timepoint = timepoint.get("soaPlannedTimePoint")
+        if planned_timepoint:
+            value = planned_timepoint["value"]
+            unit = planned_timepoint["unit"]
+            
+            # Add repeat interval if this is a repeat
+            if completed_count > 0:
+                repeat_interval = self.get_repeat_interval(action_id)
+                if repeat_interval:
+                    value += repeat_interval["value"] * completed_count
+            
+            # Convert to days (simplified - assumes units are in days or weeks)
+            if unit in ["d", "day", "days"]:
+                days_offset = value
+            elif unit in ["wk", "week", "weeks"]:
+                days_offset = value * 7
+            elif unit in ["mo", "month", "months"]:
+                days_offset = value * 30  # Approximate
+            else:
+                days_offset = value  # Fallback
+            
+            suggested_date = reference_date + datetime.timedelta(days=days_offset)
+            
+            # Calculate window if range is provided
+            planned_range = timepoint.get("soaPlannedRange")
+            if planned_range:
+                low_value = planned_range["low"]["value"]
+                high_value = planned_range["high"]["value"]
+                range_unit = planned_range["low"]["unit"]
+                
+                # Convert range to days
+                if range_unit in ["d", "day", "days"]:
+                    low_days = low_value
+                    high_days = high_value
+                elif range_unit in ["wk", "week", "weeks"]:
+                    low_days = low_value * 7
+                    high_days = high_value * 7
+                else:
+                    low_days = low_value
+                    high_days = high_value
+                
+                window_start = reference_date + datetime.timedelta(days=low_days)
+                window_end = reference_date + datetime.timedelta(days=high_days)
+            else:
+                # Use duration if available
+                planned_duration = timepoint.get("soaPlannedDuration")
+                if planned_duration:
+                    duration_value = planned_duration["value"]
+                    duration_unit = planned_duration["unit"]
+                    
+                    if duration_unit in ["d", "day", "days"]:
+                        duration_days = duration_value
+                    else:
+                        duration_days = duration_value
+                    
+                    window_start = suggested_date - datetime.timedelta(days=duration_days/2)
+                    window_end = suggested_date + datetime.timedelta(days=duration_days/2)
+                else:
+                    window_start = suggested_date
+                    window_end = suggested_date
+            
+            return suggested_date, window_start, window_end
+        
+        return None, None, None
+    
     def get_all_action_ids(self) -> List[str]:
         """Get list of all action IDs in the graph."""
         return list(self._graph.keys())
@@ -299,6 +430,44 @@ class TransitionGraph:
         visit(start_action_id)
         return result
     
+    def get_ordered_actions(self) -> List[str]:
+        """
+        Get all actions in topological order (starting actions first, following transitions).
+        Common events are separated and placed at the end.
+        
+        :return: List of action IDs in logical order
+        """
+        ordered_actions = []
+        visited = set()
+        
+        # Depth-first traversal from each starting action
+        def visit(action_id):
+            if action_id in visited:
+                return
+            visited.add(action_id)
+            
+            # Skip common events in the main flow
+            if self.is_common_event(action_id):
+                return
+            
+            ordered_actions.append(action_id)
+            
+            # Visit all next actions
+            for transition in self.get_next_transitions(action_id):
+                target_id = transition["targetId"]
+                visit(target_id)
+        
+        # Start from all starting actions
+        for start_id in self.get_starting_actions():
+            visit(start_id)
+        
+        # Add any remaining actions not visited (common events and orphans)
+        for action_id in self._graph.keys():
+            if action_id not in visited:
+                ordered_actions.append(action_id)
+        
+        return ordered_actions
+    
     def to_dict(self) -> Dict:
         """
         Export the graph as a dictionary (for compatibility with old code).
@@ -315,6 +484,15 @@ class TransitionGraph:
     def print_graph(self):
         """Print the transition graph in a readable format."""
         print_transition_graph(self.to_dict())
+    
+    def render_graph(self, figsize=(14, 10), save_path=None):
+        """
+        Render a visual representation of the transition graph.
+        
+        :param figsize: Figure size as (width, height) tuple
+        :param save_path: Optional path to save the figure
+        """
+        return render_transition_graph(self.to_dict(), figsize=figsize, save_path=save_path)
 
 
 def build_transition_graph(plan: PlanDefinition):
@@ -500,6 +678,118 @@ def print_transition_graph(graph_data):
     print(f"  Starting Actions: {len(graph_data['starting_actions'])}")
     print(f"  Common Events: {len(common_event_list)}")
     print(f"  Actions with Transitions: {sum(1 for t in graph.values() if t)}")
+
+
+def render_transition_graph(graph_data, figsize=(14, 10), save_path=None):
+    """
+    Render a force-directed graph visualization of the transition graph using matplotlib.
+    
+    :param graph_data: Dictionary returned by build_transition_graph or TransitionGraph.to_dict()
+    :type graph_data: dict
+    :param figsize: Figure size as (width, height) tuple
+    :type figsize: tuple
+    :param save_path: Optional path to save the figure
+    :type save_path: str or None
+    """
+    try:
+        import matplotlib.pyplot as plt
+        import networkx as nx
+    except ImportError:
+        print("Error: matplotlib and networkx are required for graph visualization.")
+        print("Install with: pip install matplotlib networkx")
+        return
+    
+    # Create directed graph
+    G = nx.DiGraph()
+    
+    all_actions = graph_data["all_actions"]
+    graph = graph_data["graph"]
+    starting_actions = graph_data["starting_actions"]
+    
+    # Count incoming edges for each action
+    incoming_count = {}
+    for action_id in graph.keys():
+        incoming_count[action_id.split('-')[0]] = 0
+    
+    for transitions in graph.values():
+        for transition in transitions:
+            target_id = transition["targetId"]
+            if target_id.split('-')[0] in incoming_count:
+                incoming_count[target_id.split('-')[0]] += 1
+    
+    # Add nodes
+    for action_id, action_info in all_actions.items():
+        G.add_node(action_id.split('-')[0], 
+                   title=action_info['title'], 
+                   definition=action_info.get('definition', 'N/A'))
+    
+    # Add edges with labels
+    edge_labels = {}
+    for action_id, transitions in graph.items():
+        for transition in transitions:
+            target_id = transition["targetId"]
+            G.add_edge(action_id.split('-')[0], target_id.split('-')[0])
+            
+            # Create edge label from condition
+            condition = transition.get("condition")
+            if condition and condition.get("expression"):
+                label = f"{condition['kind'][:3]}"  # Shortened label
+                edge_labels[(action_id.split('-')[0], target_id.split('-')[0])] = label
+    
+    # Create figure
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Use spring layout for force-directed positioning
+    pos = nx.spring_layout(G, k=2, iterations=50, seed=42)
+    
+    # Categorize nodes
+    starting_nodes = [n for n in G.nodes() if n in starting_actions]
+    common_event_nodes = [n for n in G.nodes() if incoming_count.get(n, 0) > 1]
+    regular_nodes = [n for n in G.nodes() if n not in starting_nodes and n not in common_event_nodes]
+    
+    # Draw nodes with different colors
+    nx.draw_networkx_nodes(G, pos, nodelist=starting_nodes, 
+                          node_color='lightgreen', node_size=3000, 
+                          node_shape='s', alpha=0.9, ax=ax, label='Starting Actions')
+    
+    nx.draw_networkx_nodes(G, pos, nodelist=common_event_nodes, 
+                          node_color='orange', node_size=3000, 
+                          node_shape='d', alpha=0.9, ax=ax, label='Common Events')
+    
+    nx.draw_networkx_nodes(G, pos, nodelist=regular_nodes, 
+                          node_color='lightblue', node_size=3000, 
+                          alpha=0.9, ax=ax, label='Regular Actions')
+    
+    # Draw edges
+    nx.draw_networkx_edges(G, pos, edge_color='gray', 
+                          arrows=True, arrowsize=20, 
+                          arrowstyle='->', width=2, 
+                          connectionstyle='arc3,rad=0.1', ax=ax)
+    
+    # Draw labels
+    labels = {node: f"{node}\n{all_actions[node]['title'][:20]}" for node in G.nodes()}
+    nx.draw_networkx_labels(G, pos, labels, font_size=8, 
+                           font_weight='bold', ax=ax)
+    
+    # Draw edge labels if any
+    if edge_labels:
+        nx.draw_networkx_edge_labels(G, pos, edge_labels, 
+                                     font_size=6, ax=ax)
+    
+    ax.set_title("Transition Graph Visualization", fontsize=16, fontweight='bold')
+    ax.legend(loc='upper left', fontsize=10)
+    ax.axis('off')
+    
+    plt.tight_layout()
+    
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"Graph saved to {save_path}")
+    
+    plt.show()
+    
+    return fig, ax
+
 
 def unpack_extension(extension: Extension):
     """

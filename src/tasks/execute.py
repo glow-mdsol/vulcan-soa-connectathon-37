@@ -162,6 +162,14 @@ def bundle_to_yaml(bundle: Bundle) -> str:
     
     return yaml_str
 
+"""
+TODO:
+* Handle the interaction starts -> finishes.  Should these be identified as tasks on the patient?
+* Repeating cycles, how do we have them appear in the care plan?  ie Cycle 1, Cycle 2, etc.
+* Nested plan definitions (eg Cycles referenced from StudyPlan containing visits, the nested plan definitions for the visits should inherit the cycle 
+  information (eg Cycle 1 Day 1, Cycle 2 Day 1, etc.))
+"""
+
 
 def manifest_plan_definition(
     plan_definition_id: str,
@@ -169,6 +177,7 @@ def manifest_plan_definition(
     visit_date: datetime.date,
     client: Client,
     skipping: Optional[bool] = False,
+    event_name: Optional[str] = None,
 ):
     """
     Create a care plan for a research subject.
@@ -192,7 +201,7 @@ def manifest_plan_definition(
     visit_oid = plan_definition.title
     # get the Visit OID from the plandefinition
     for identifier in plan_definition.identifier if plan_definition.identifier else []:
-        if identifier.type == "OID":
+        if identifier.type and identifier.type.text == "OID":
             visit_oid = identifier.value
             break
     # check for existing request orchestration
@@ -253,6 +262,8 @@ def manifest_plan_definition(
                 ],
                 subject=Reference(reference=f"Patient/{patient.id}", type="Patient"),
             )
+            if event_name:
+                care_plan.title = f"Skipped: {event_name}"
             # save the care plan
             created_care_plan = client.create(care_plan)
             logger.info(f"CarePlan {created_care_plan.id} created with status 'revoked' due to skipping.")
@@ -269,6 +280,8 @@ def manifest_plan_definition(
                 ],
                 subject=Reference(reference=f"Patient/{patient.id}", type="Patient"),
             )
+            if event_name:
+                care_plan.title = event_name
             created_care_plan = client.create(care_plan)
             logger.info(f"CarePlan {created_care_plan.id} created with status 'active'.")
     # search for existing service request
