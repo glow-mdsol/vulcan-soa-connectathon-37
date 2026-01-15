@@ -706,20 +706,21 @@ def render_transition_graph(graph_data, figsize=(14, 10), save_path=None):
     graph = graph_data["graph"]
     starting_actions = graph_data["starting_actions"]
     
+
     # Count incoming edges for each action
     incoming_count = {}
     for action_id in graph.keys():
-        incoming_count[action_id.split('-')[0]] = 0
+        incoming_count[action_id] = 0
     
     for transitions in graph.values():
         for transition in transitions:
             target_id = transition["targetId"]
-            if target_id.split('-')[0] in incoming_count:
-                incoming_count[target_id.split('-')[0]] += 1
+            if target_id in incoming_count:
+                incoming_count[target_id] += 1
     
     # Add nodes
     for action_id, action_info in all_actions.items():
-        G.add_node(action_id.split('-')[0], 
+        G.add_node(action_id, 
                    title=action_info['title'], 
                    definition=action_info.get('definition', 'N/A'))
     
@@ -728,13 +729,13 @@ def render_transition_graph(graph_data, figsize=(14, 10), save_path=None):
     for action_id, transitions in graph.items():
         for transition in transitions:
             target_id = transition["targetId"]
-            G.add_edge(action_id.split('-')[0], target_id.split('-')[0])
+            G.add_edge(action_id, target_id)
             
             # Create edge label from condition
             condition = transition.get("condition")
             if condition and condition.get("expression"):
                 label = f"{condition['kind'][:3]}"  # Shortened label
-                edge_labels[(action_id.split('-')[0], target_id.split('-')[0])] = label
+                edge_labels[(action_id, target_id)] = label
     
     # Create figure
     fig, ax = plt.subplots(figsize=figsize)
